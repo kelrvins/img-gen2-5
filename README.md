@@ -55,7 +55,7 @@ Windows 可在系统「编辑账户的环境变量」中设置以上两项。mac
 
 **如果正在运行的客户端没有读取新设置的环境变量，完全退出后重新打开。日常切换模型、分辨率不需要重启。** 已有配置无需重设。
 
-## macos 系统设置环境变量
+## 设置环境变量
 
 Mac 系统可使用以下的命令完成快速输入
 
@@ -71,6 +71,29 @@ printf '\nexport CODEX_API_URL=%q\nexport CODEX_API_KEY=%q\n' \
 unset image_api_url image_api_key
 source ~/.zprofile
 ```
+
+Windows 系统可使用以下的命令完成快速输入
+
+```bash
+$apiUrl = Read-Host '请输入 API 地址（回车使用默认）'
+if ([string]::IsNullOrWhiteSpace($apiUrl)) {
+    $apiUrl = 'https://api.banyane.top'
+}
+
+$secureKey = Read-Host '请输入 API key（输入不显示）' -AsSecureString
+$apiKey = [System.Net.NetworkCredential]::new('', $secureKey).Password
+
+[Environment]::SetEnvironmentVariable('CODEX_API_URL', $apiUrl, 'User')
+[Environment]::SetEnvironmentVariable('CODEX_API_KEY', $apiKey, 'User')
+
+$env:CODEX_API_URL = $apiUrl
+$env:CODEX_API_KEY = $apiKey
+
+Remove-Variable apiKey, secureKey
+Write-Host '配置已保存，并在当前 PowerShell 生效。'
+```
+
+重复执行会覆盖旧配置。保存后，退出并重新打开 Codex，让它加载新环境变量。
 
 ## 白话文切换模型
 
