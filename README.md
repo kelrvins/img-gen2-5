@@ -55,6 +55,23 @@ Windows 可在系统「编辑账户的环境变量」中设置以上两项。mac
 
 **如果正在运行的客户端没有读取新设置的环境变量，完全退出后重新打开。日常切换模型、分辨率不需要重启。** 已有配置无需重设。
 
+## macos 系统设置环境变量
+
+Mac 系统可使用以下的命令完成快速输入
+
+```bash
+read -r 'image_api_url?请输入 API 地址（直接回车使用默认值）：'
+read -rs 'image_api_key?请输入 API key（输入即可，只是不显示）：'
+echo
+
+printf '\nexport CODEX_API_URL=%q\nexport CODEX_API_KEY=%q\n' \
+  "${image_api_url:-https://api.banyane.top}" \
+  "$image_api_key" >> ~/.zprofile
+
+unset image_api_url image_api_key
+source ~/.zprofile
+```
+
 ## 白话文切换模型
 
 明确指定的模型优先；没指定的选项沿用本对话已有选择。新对话没有选择时才使用 Image 2.5 + 1K。
